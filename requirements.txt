@@ -1,4 +1,5 @@
 django<3
 gunicorn
 mysqlclient
+PyGithub
 requests

@@ -1,13 +1,14 @@
 import logging
 import requests
 import urllib.parse
+from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from django.shortcuts import HttpResponseRedirect, HttpResponse
 from django.views.decorators.http import require_http_methods
-from django.conf import settings
+from github import Github
 from oauth.models import Oauth
 
 logger = logging.getLogger('app')
@@ -22,13 +23,12 @@ def do_oauth(request):
     request.session['login_redirect_url'] = get_next_url(request)
     params = {
         'client_id': oauth.client_id,
-        'redirect_uri': oauth.redirect_uri,
-        'response_type': oauth.response_type,
         'scope': oauth.scope,
+        'redirect_uri': oauth.redirect_uri,
     }
     url_params = urllib.parse.urlencode(params)
-    url = 'https://git.cssnr.com/oauth/authorize?{}'.format(url_params)
-    return HttpResponseRedirect(url)
+    new_uri = 'https://github.com/login/oauth/authorize?{}'.format(url_params)
+    return HttpResponseRedirect(new_uri)
 
 
 def callback(request):
@@ -37,25 +37,23 @@ def callback(request):
     """
     try:
         oauth_code = request.GET['code']
-        logger.debug('oauth_code: {}'.format(oauth_code))
         access_token = get_token(oauth_code)
-        logger.debug('access_token: {}'.format(access_token))
-        gitlab_profile = get_profile(access_token)
-        logger.debug(gitlab_profile)
-        auth = login_user(request, gitlab_profile)
-        if not auth:
-            err_msg = 'Unable to complete login process. Report as a Bug.'
-            return HttpResponse(err_msg, content_type='text/plain')
-        try:
-            next_url = request.session['login_redirect_url']
-        except Exception:
-            next_url = '/'
-        return HttpResponseRedirect(next_url)
-
+        github_profile = get_profile(access_token)
     except Exception as error:
         logger.exception(error)
         err_msg = 'Fatal Login Error. Report as Bug: %s' % error
         return HttpResponse(err_msg, content_type='text/plain')
+
+    auth = login_user(request, github_profile)
+    if not auth:
+        err_msg = 'Unable to complete login process. Report as a Bug.'
+        return HttpResponse(err_msg, content_type='text/plain')
+
+    try:
+        next_url = request.session['login_redirect_url']
+    except:
+        next_url = '/'
+    return HttpResponseRedirect(next_url)
 
 
 @require_http_methods(['POST'])
@@ -63,25 +61,26 @@ def log_out(request):
     """
     View  /oauth/logout/
     """
-    next_url = get_next_url(request)
-    request.session['login_next_url'] = next_url
+    # next_url = get_next_url(request)
     logout(request)
-    return redirect(next_url)
+    # request.session['login_next_url'] = next_url
+    # return redirect(next_url)
+    return redirect('home.index')
 
 
-def login_user(request, profile):
+def login_user(request, data):
     """
     Login or Create New User
     """
     try:
-        user = User.objects.filter(username=profile['username']).get()
-        user = update_profile(user, profile)
+        user = User.objects.filter(username=data['username']).get()
+        user = update_profile(user, data)
         user.save()
         login(request, user)
         return True
     except ObjectDoesNotExist:
-        user = User.objects.create_user(profile['username'], profile['email'])
-        user = update_profile(user, profile)
+        user = User.objects.create_user(data['username'], data['email'])
+        user = update_profile(user, data)
         user.save()
         login(request, user)
         return True
@@ -92,43 +91,69 @@ def login_user(request, profile):
 
 def get_token(code):
     """
-    Post OAuth code to Twitch and Return access_token
+    Post OAuth code to GitHub and return access_token
     """
     oauth = Oauth.objects.all()[0]
-    url = 'https://git.cssnr.com/oauth/token'
+    url = 'https://github.com/login/oauth/access_token'
     data = {
         'client_id': oauth.client_id,
         'client_secret': oauth.client_secret,
-        'redirect_uri': oauth.redirect_uri,
         'code': code,
-        'grant_type': oauth.grant_type,
     }
-    # headers = {'Accept': 'application/json'}
-    r = requests.post(url, data=data, timeout=10)
-    logger.debug('status_code: {}'.format(r.status_code))
-    logger.debug('content: {}'.format(r.content))
+    headers = {'Accept': 'application/json'}
+    r = requests.post(url, data=data, headers=headers, timeout=10)
     return r.json()['access_token']
 
 
 def get_profile(access_token):
     """
-    Get Twitch Profile for Authenticated User
+    Get GitHub Profile and Emails
     """
-    url = 'https://git.cssnr.com/api/v4/user'
-    params = {'access_token': access_token}
-    r = requests.get(url, params=params, timeout=10)
-    logger.debug('status_code: {}'.format(r.status_code))
-    logger.debug('content: {}'.format(r.content))
-    return r.json()
+    gh = Github(access_token)
+    gh_user = gh.get_user()
+    return {
+        'username': gh_user.login,
+        'email': get_gh_email(gh_user),
+        'access_token': access_token,
+        'github_id': gh_user.id,
+        'avatar_url': gh_user.avatar_url,
+        'html_url': gh_user.html_url,
+    }
 
 
-def update_profile(user, profile):
+def update_profile(user, data):
     """
     Update user_profile from GitHub data
     """
-    user.first_name = profile['name']
-    user.email = profile['email']
+    user.profile.access_token = data['access_token']
+    user.profile.github_id = data['github_id']
+    user.profile.avatar_url = data['avatar_url']
+    user.profile.html_url = data['html_url']
+    user.email = data['email']
     return user
+
+
+def get_gh_email(gh_user):
+    """
+    1st Returns GitHub email if it can be found else None
+    2nd Returns True or False if it is found or not
+    """
+    emails = gh_user.get_emails()
+    for email in emails:
+        if 'primary' in email:
+            if email['primary']:
+                if 'email' in email:
+                    return email['email']
+    for email in emails:
+        if 'verified' in email:
+            if email['verified']:
+                if 'email' in email:
+                    return email['email']
+    for email in emails:
+        if 'email' in email:
+            if email['email']:
+                return email['email']
+    return None
 
 
 def get_next_url(request):
@@ -137,13 +162,13 @@ def get_next_url(request):
     """
     try:
         next_url = request.GET['next']
-    except Exception:
+    except:
         try:
             next_url = request.POST['next']
-        except Exception:
+        except:
             try:
                 next_url = request.session['login_next_url']
-            except Exception:
+            except:
                 next_url = '/'
     if not next_url:
         next_url = '/'
