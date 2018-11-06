@@ -1,0 +1,38 @@
+{% extends "main.html" %}
+{% block about_active %}active{% endblock %}
+{% block title %}About{% endblock %}
+{% load staticfiles %}
+{% load home_tags %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            {% if data.about.about_image %}
+                <div class="col-sm-4 float-right m-2">
+                    <img src="{{ MEDIA_URL }}{{ data.about.about_image }}" alt="{{ site_title_short }}"
+                         class="float-right img-thumbnail img-fluid">
+                </div>
+            {% endif %}
+            <h2>{{ data.about.about_title }}</h2>
+            {% if data.about.about_first_paragraph %}
+                <p class="lead">{{ data.about.about_first_paragraph|safe }}</p>
+            {% endif %}
+            {% if data.about.about_second_paragraph %}
+                <p>{{ data.about.about_second_paragraph|safe }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        {% for social in data.social %}{% if social.enabled %}
+            <div class="col-sm-2 mt-4">
+                <a href="{{ social.url }}" target="_blank">
+                    <img src="{% icon_url social.icon %}" alt="{{ social.name }}"
+                         class="img-fluid" /></a>
+            </div>
+        {% endif %}{% endfor %}
+    </div>
+
+{% endblock %}

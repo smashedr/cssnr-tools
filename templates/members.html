@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+{% block members_active %}active{% endblock %}
+{% block title %}Members{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            {% if request.user.profile.logo_url %}
+                <div class="col-sm-4 float-right m-2">
+                    <img src="{{ request.user.profile.logo_url }}" class="float-right img-thumbnail img-fluid">
+                </div>
+            {% endif %}
+            <h2>Members Area</h2>
+            <p class="lead">Hello <strong>{% if request.user.first_name %}{{ request.user.first_name }}
+                {% else %}{{ request.user.username }}{% endif %}</strong>. This section is not yet finished...</p>
+            <p class="mt-2">This section will be used to post special stuff for members and subscribers to our community.</p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,34 @@
+[
+  {
+    "model": "oauth.Oauth",
+    "pk": 1,
+    "fields": {
+      "client_id": "xxxxxxxxxx",
+      "client_secret": "xxxxxxxxxx",
+      "redirect_uri": "https://dev.twitch.tv/docs/authentication/",
+      "response_type": "code",
+      "grant_type": "authorization_code",
+      "scope": "user_read"
+    }
+  },
+  {
+    "model": "home.Settings",
+    "pk": 1,
+    "fields": {
+      "site_title_short": "Duders",
+      "site_title_long": "Duders Club",
+      "site_description": "Welcome to Duders Club.",
+      "twitch_username": "duders719"
+    }
+  },
+  {
+    "model": "home.About",
+    "pk": 1,
+    "fields": {
+      "about_title": "About Duders",
+      "about_first_paragraph": "Not much to say here. I am a dude; they call me Duders...",
+      "about_second_paragraph": "I will write some more stuff here some day.",
+      "about_image": null
+    }
+  }
+]

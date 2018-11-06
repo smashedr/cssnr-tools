@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+{% block home_active %}active{% endblock %}
+{% block title %}Home{% endblock %}
+{% load home_tags %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+    <div class="row mt-2">
+        <div class="col">
+            {% if twitch_username %}
+
+                <div id="twitch-embed" style="height:80vh;"></div>
+                <script src="https://embed.twitch.tv/embed/v1.js"></script>
+                <script type="text/javascript">
+                    new Twitch.Embed("twitch-embed", {
+                        width: '100%',
+                        height: '100%',
+                        theme: 'dark',
+                        channel: "{{ twitch_username }}"
+                    });
+                </script>
+
+                <p>To open stream in an external player
+                    <a href="{% url 'get_m3u8' %}" target="_blank" class="text-info">click here</a>.</p>
+
+            {% else %}
+                <div class="alert alert-warning">
+                    <h4 class="alert-heading">Site Not Configured!</h4>
+                    <p class="mb-0">This site has not yet been configured. Head over to the
+                        <a href="{% url 'admin:index' %}" class="alert-link">admin panel</a> to do so.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
