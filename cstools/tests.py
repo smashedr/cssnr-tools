@@ -7,9 +7,7 @@ class TestViews(TestCase):
 
     def setUp(self):
         self.views = {
-            'home_view': 200,
-            'about_view': 200,
-            'members_view': 302,
+            'home.index': 302,
         }
 
     def test_views(self):

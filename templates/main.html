@@ -10,21 +10,21 @@
 
 	<!-- Meta -->
 	<meta name="author" content="Shane Rice"/>
-	<meta name="title" content="{{ site_title_long }}"/>
-	<meta name="description" content="{{ site_description }}"/>
+	<meta name="title" content="Django Bootstrap Awesomeness"/>
+	<meta name="description" content="Coming soon to a GitLab near you..."/>
 
 	<meta property="og:author" content="Shane Rice">
-	<meta property="og:title" content="{{ site_title_long }}">
-	<meta property="og:description" content="{{ site_description }}">
+	<meta property="og:title" content="Django Bootstrap Awesomeness">
+	<meta property="og:description" content="Coming soon to a GitLab near you...">
 	<meta property="og:type" content="website">
-	<meta property="og:url" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'home_view' %}">
-	<meta property="og:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{{ MEDIA_URL }}{{ site_meta_image }}">
+	<meta property="og:url" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'home.index' %}">
+	<meta property="og:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/logo.png' %}">
 	<meta property="og:image:type" content="image/png">
 
-	<title>{{ site_title_long }} - {% block title %}{% endblock %}</title>
+	<title>Django Bootstrap Awesomeness - {% block title %}{% endblock %}</title>
 
 	<!-- Media -->
-	<link rel="icon" href="{{ MEDIA_URL }}{{ site_favicon }}">
+	<link rel="icon" href="{% static 'images/logo.png' %}">
 
 	<link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link href="{% static 'font-awesome/css/all.min.css' %}" rel="stylesheet">
@@ -38,7 +38,7 @@
 <div class="container-fluid">
     {% block heading %}
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mt-2">
-            <a class="navbar-brand" href="{% url 'home_view' %}">{{ site_title_short }}</a>
+            <a class="navbar-brand" href="{% url 'home.index' %}">Menu</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
                     aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -47,30 +47,16 @@
             <div class="collapse navbar-collapse" id="navbarColor02">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item {% block home_active %}{% endblock %}">
-                        <a class="nav-link" href="{% url 'home_view' %}">Home</a>
+                        <a class="nav-link" href="{% url 'home.index' %}">Home</a>
                     </li>
-                    <li class="nav-item {% block about_active %}{% endblock %}">
-                        <a class="nav-link" href="{% url 'about_view' %}">About</a>
-                    </li>
-                    <li class="nav-item {% block romhacks_active %}{% endblock %}">
-                        <a class="nav-link" href="{% url 'romhacks_view' %}">ROM Hacks</a>
-                    </li>
-                    <li class="nav-item {% block speedrun_active %}{% endblock %}">
-                        <a class="nav-link" href="{% url 'speedrun_view' %}">Speedruns</a>
-                    </li>
-                    {% if request.user.is_authenticated %}
-                        <li class="nav-item {% block members_active %}{% endblock %}">
-                            <a class="nav-link" href="{% url 'members_view' %}">Members</a>
-                        </li>
-                    {% endif %}
                 </ul>
 
                 {% if not request.user.is_authenticated %}
-                    <a href="{% url 'oauth' %}?next={{ request.path }}" class="btn btn-outline-info" role="button">
-                        Log in with Twitch
+                    <a href="{% url 'oauth.login' %}?next={{ request.path }}" class="btn btn-outline-info" role="button">
+                        Log In
                         <i class="fas fa-sign-in-alt"></i></a>
                 {% else %}
-                    <a href="https://www.twitch.tv/settings/profile" target="_blank" class="text-info mr-3">
+                    <a href="https://git.cssnr.com/{{ request.user.username }}" target="_blank" class="text-info mr-3">
                         {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}</a>
                     {% if user.is_staff %}
                         <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary mr-1" role="button">
@@ -95,7 +81,7 @@
 <script type="text/javascript" src="{% static 'main/js/main.js' %}"></script>
 
 {% if request.user.is_authenticated %}
-    <form id="log-out" action="{% url 'logout' %}" method="POST">
+    <form id="log-out" action="{% url 'oauth.logout' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
     </form>
