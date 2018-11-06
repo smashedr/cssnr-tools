@@ -37,42 +37,49 @@
 <!-- Main content -->
 <div class="container-fluid">
     {% block heading %}
-        <div class="row">
-            <div class="col">
-                <nav class="navbar navbar-expand-md navbar-light bg-light mt-2">
-                    <a class="navbar-brand" href="{% url 'home.index' %}">Menu</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
-                            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+        <nav class="navbar navbar-expand-md sticky-top navbar-light bg-light">
+            <a class="navbar-brand" href="{% url 'home.index' %}">Menu</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
+                    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                    <div class="collapse navbar-collapse" id="navbarColor02">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item {% block home_active %}{% endblock %}">
-                                <a class="nav-link" href="{% url 'home.index' %}">Home</a>
-                            </li>
-                        </ul>
+            <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto">
 
-                        {% if not request.user.is_authenticated %}
-                            <a href="{% url 'oauth.login' %}?next={{ request.path }}" class="btn btn-outline-info" role="button">
-                                Log In
-                                <i class="fas fa-sign-in-alt"></i></a>
-                        {% else %}
-                            <a href="https://git.cssnr.com/{{ request.user.username }}" target="_blank" class="text-info mr-3">
-                                {{ request.user.username }}</a>
-                            {% if user.is_staff %}
-                                <a href="{% url 'admin:index' %}" class="btn btn-outline-success mr-1" role="button">
-                                    Admin
-                                    <i class="fas fa-rocket"></i></a>
-                            {% endif %}
-                            <a href="" class="log-out btn btn-outline-info" role="button">
-                                Log Out
-                                <i class="fas fa-sign-out-alt"></i></a>
-                        {% endif %}
-                    </div>
-                </nav>
+                    <li class="nav-item {% block active_home %}{% endblock %}">
+                        <a class="nav-link" href="{% url 'home.index' %}">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% block active_twitch %}{% endblock %}" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Twitch</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'twitch.live_status' %}">Live Channel Info</a>
+                        </div>
+                    </li>
+
+                </ul>
+
+                {% if not request.user.is_authenticated %}
+                    <a href="{% url 'oauth.login' %}?next={{ request.path }}" class="btn btn-outline-info" role="button">
+                        Log In
+                        <i class="fas fa-sign-in-alt"></i></a>
+                {% else %}
+                    <a href="https://git.cssnr.com/{{ request.user.username }}" target="_blank" class="text-info mr-3">
+                        {{ request.user.username }}</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'admin:index' %}" class="btn btn-outline-success mr-1" role="button">
+                            Admin
+                            <i class="fas fa-rocket"></i></a>
+                    {% endif %}
+                    <a href="" class="log-out btn btn-outline-info" role="button">
+                        Log Out
+                        <i class="fas fa-sign-out-alt"></i></a>
+                {% endif %}
             </div>
-        </div>
+        </nav>
     {% endblock %}
 
     {% block body %}{% endblock %}
