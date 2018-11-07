@@ -7,7 +7,8 @@ class TestViews(TestCase):
 
     def setUp(self):
         self.views = {
-            'home.index': 302,
+            'home.index': 200,
+            'twitch.live_status': 200,
         }
 
     def test_views(self):

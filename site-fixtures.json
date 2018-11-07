@@ -5,7 +5,7 @@
     "fields": {
       "client_id": "xxxxxxxxxx",
       "client_secret": "xxxxxxxxxx",
-      "redirect_uri": "https://dev.twitch.tv/docs/authentication/",
+      "redirect_uri": "https://developer.github.com/v3/oauth/",
       "scope": "user:email"
     }
   }
