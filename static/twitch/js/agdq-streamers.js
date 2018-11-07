@@ -1,24 +1,22 @@
 // DoC U MenT DoT ReaD Y
 $(document).ready(function() {
 
-    $('#twitch-channel-form').on('submit', function(event){
+    $('#agdq-streamers-form').on('submit', function(event){
         event.preventDefault();
-        if ($('#twitch-channel-btn').hasClass('disabled')) { return; }
+        if ($('#agdq-streamers-btn').hasClass('disabled')) { return; }
         var formData = new FormData($(this)[0]);
         $.ajax({
             url: window.location.pathname,
             type: 'POST',
             data: formData,
             beforeSend: function( jqXHR ){
-                $('#twitch-channel-btn').addClass('disabled');
-                $('#twitch-channel').attr('disabled', true);
+                $('#agdq-streamers-btn').addClass('disabled');
                 $('#search-icon').addClass('fa-spin');
                 $('#search-status').addClass('progress-bar-striped progress-bar-animated');
                 $('#search-results').empty();
             },
             complete: function(){
-                $('#twitch-channel-btn').removeClass('disabled');
-                $('#twitch-channel').attr('disabled', false);
+                $('#agdq-streamers-btn').removeClass('disabled');
                 $('#search-icon').removeClass('fa-spin');
                 $('#search-status').removeClass('progress-bar-striped progress-bar-animated');
             },
@@ -28,6 +26,7 @@ $(document).ready(function() {
             },
             error: function(data, textStatus) {
                 console.log('Status: '+data.status+', Response: '+data.responseText);
+                console.log(data.responseJSON);
                 console.log(data.responseJSON.success);
                 console.log(data.responseJSON.results);
                 $('#search-results').append('<div class="alert alert-danger">'+data.responseJSON.results+'</div>'+

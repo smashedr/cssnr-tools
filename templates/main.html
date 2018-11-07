@@ -10,18 +10,18 @@
 
 	<!-- Meta -->
 	<meta name="author" content="Shane Rice"/>
-	<meta name="title" content="Django Bootstrap Awesomeness"/>
+	<meta name="title" content="CS Tools"/>
 	<meta name="description" content="Coming soon to a GitLab near you..."/>
 
 	<meta property="og:author" content="Shane Rice">
-	<meta property="og:title" content="Django Bootstrap Awesomeness">
+	<meta property="og:title" content="CS Tools">
 	<meta property="og:description" content="Coming soon to a GitLab near you...">
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'home.index' %}">
 	<meta property="og:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/logo.png' %}">
 	<meta property="og:image:type" content="image/png">
 
-	<title>Django Bootstrap Awesomeness - {% block title %}{% endblock %}</title>
+	<title>CS Tools - {% block title %}{% endblock %}</title>
 
 	<!-- Media -->
 	<link rel="icon" href="{% static 'images/favicon.ico' %}">
@@ -38,7 +38,7 @@
 <div class="container-fluid">
     {% block heading %}
         <nav class="navbar navbar-expand-md sticky-top navbar-light bg-light">
-            <a class="navbar-brand" href="{% url 'home.index' %}">Menu</a>
+            <a class="navbar-brand" href="{% url 'home.index' %}">Tools</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navigation"
                     aria-controls="main-navigation" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -57,6 +57,7 @@
                             Twitch</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{% url 'twitch.live_status' %}">Live Channel Info</a>
+                            <a class="dropdown-item" href="{% url 'twitch.agdq_streamers' %}">AGDQ Streamers Online</a>
                         </div>
                     </li>
 

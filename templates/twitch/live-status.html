@@ -11,18 +11,16 @@
 {% block body %}
     <div class="row mt-2">
         <div class="col">
+            <h1>Twitch Live Channel Status</h1>
 
             <form name="twitch-channel-form" id="twitch-channel-form">
                 <div class="form-group">
                     <label for="twitch-channel">Twitch Channel</label>
                     <input type="text" class="form-control" name="twitch-channel" id="twitch-channel"
                            aria-describedby="twitch-channel-help" placeholder="Twitch Channel" required>
-                    <small id="twitch-channel-help" class="form-text text-muted">Full Twitch Channel/Username.</small>
-                </div>
-
-                <div class="progress ">
-                    <div id="search-status" class="progress-bar" role="progressbar"
-                         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    <small id="twitch-channel-help" class="form-text text-muted">
+                        Note: due to the Twitch API rate limit this will take about 1 minute for every 30 chatters.
+                    </small>
                 </div>
 
                 <button class="btn btn-primary mt-2" type="submit" id="twitch-channel-btn">
@@ -30,8 +28,12 @@
                 </button>
             </form>
 
-            <div class="alert alert-primary mt-2">
-                This tool is not yet functional.
+            <div class="progress mt-2">
+                <div id="search-status" class="progress-bar" role="progressbar"
+                     aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
+
+            <div id="search-results" class="mt-2">
             </div>
 
         </div>
