@@ -35,7 +35,7 @@ if 'sqlite_db' in CONFIG['django']:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'NAME': CONFIG['django']['sqlite_db'],
         }
     }
 else:
@@ -94,7 +94,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'oauth',
-    'tools',
 ]
 
 MIDDLEWARE = [

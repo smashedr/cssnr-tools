@@ -5,8 +5,8 @@ allowed_hosts   = *
 language_code   = en-us
 time_zone       = UTC
 static_root     = /var/www/html/static
-media_root      = /data/duders.club/media
-sqlite_db       = db.sqlite3
+media_root      = /data/cstools/media
+sqlite_db       = ./db.sqlite3
 
 [logging]
 app_level       = DEBUG
