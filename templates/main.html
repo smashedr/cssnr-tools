@@ -39,12 +39,12 @@
     {% block heading %}
         <nav class="navbar navbar-expand-md sticky-top navbar-light bg-light">
             <a class="navbar-brand" href="{% url 'home.index' %}">Menu</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
-                    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navigation"
+                    aria-controls="main-navigation" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarColor02">
+            <div class="collapse navbar-collapse" id="main-navigation">
                 <ul class="navbar-nav mr-auto">
 
                     <li class="nav-item {% block active_home %}{% endblock %}">
@@ -52,8 +52,8 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {% block active_twitch %}{% endblock %}" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {% block active_twitch %}{% endblock %}" href="#"
+                           id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Twitch</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{% url 'twitch.live_status' %}">Live Channel Info</a>
@@ -67,7 +67,7 @@
                         Log In
                         <i class="fas fa-sign-in-alt"></i></a>
                 {% else %}
-                    <a href="https://git.cssnr.com/{{ request.user.username }}" target="_blank" class="text-info mr-3">
+                    <a href="https://github.com/{{ request.user.username }}" target="_blank" class="text-info mr-3">
                         {{ request.user.username }}</a>
                     {% if user.is_staff %}
                         <a href="{% url 'admin:index' %}" class="btn btn-outline-success mr-1" role="button">
@@ -90,6 +90,7 @@
 <script type="text/javascript" src="{% static 'bootstrap/popper.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'main/js/main.js' %}"></script>
+{% block js %}{% endblock %}
 
 {% if request.user.is_authenticated %}
     <form id="log-out" action="{% url 'oauth.logout' %}" method="POST">
