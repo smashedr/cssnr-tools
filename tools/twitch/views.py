@@ -21,12 +21,11 @@ class LiveStatus(View):
 
     def post(self, request):
         try:
-            channel = request.POST['twitch-channel']
+            channel = request.POST['twitch-channel'].strip()
             chatters = True if 'process-chatters' in request.POST else False
             logger.info(chatters)
             logger.info(channel)
             results = this_is_more_than_a_function(channel, chatters=chatters)
-            # results = {'success': False, 'data': 'ohhi'}
             logger.info('results: %s', results['data'])
             if results['success']:
                 data = {'success': True, 'results': results['data']}

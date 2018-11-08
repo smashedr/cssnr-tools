@@ -9,6 +9,7 @@ class TestViews(TestCase):
         self.views = {
             'home.index': 200,
             'twitch.live_status': 200,
+            'twitch.agdq_streamers': 200,
         }
 
     def test_views(self):

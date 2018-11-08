@@ -25,6 +25,7 @@ $(document).ready(function() {
                 $('#search-results').append('<pre><code>'+data.results+'</code></pre>');
             },
             error: function(data, textStatus) {
+                console.log('Status: '+data.status+', Response: '+data.responseText);
                 if (data.responseJSON) {
                     console.log(data.responseJSON.success);
                     console.log(data.responseJSON.results);
