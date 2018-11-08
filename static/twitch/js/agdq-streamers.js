@@ -25,12 +25,15 @@ $(document).ready(function() {
                 $('#search-results').append('<pre><code>'+data.results+'</code></pre>');
             },
             error: function(data, textStatus) {
-                console.log('Status: '+data.status+', Response: '+data.responseText);
-                console.log(data.responseJSON);
-                console.log(data.responseJSON.success);
-                console.log(data.responseJSON.results);
-                $('#search-results').append('<div class="alert alert-danger">'+data.responseJSON.results+'</div>'+
-                    '<pre><code>'+data.responseText+'</code></pre>');
+                if (data.responseJSON) {
+                    console.log(data.responseJSON.success);
+                    console.log(data.responseJSON.results);
+                    $('#search-results').append('<div class="alert alert-danger">' + data.responseJSON.results + '</div>' +
+                        '<pre><code>' + data.responseText + '</code></pre>');
+                }else{
+                    $('#search-results').append('<div class="alert alert-danger">Unknown Error Occurred.</div>' +
+                        '<pre><code>' + data.responseText + '</code></pre>');
+                }
             },
             cache: false,
             contentType: false,
