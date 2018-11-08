@@ -18,14 +18,27 @@
                     <label for="twitch-channel">Twitch Channel</label>
                     <input type="text" class="form-control" name="twitch-channel" id="twitch-channel"
                            aria-describedby="twitch-channel-help" placeholder="Twitch Channel" required>
-                    <small id="twitch-channel-help" class="form-text text-muted">
-                        Note: due to the Twitch API rate limit this will take about 1 minute for every 30 chatters.
-                    </small>
                 </div>
-
-                <button class="btn btn-primary mt-2" type="submit" id="twitch-channel-btn">
-                    Search <i id="search-icon" class="fas fa-sync ml-2"></i>
-                </button>
+                <div class="form-row align-items-center">
+                    <div class="col-auto">
+                        <button class="btn btn-primary mt-2" type="submit" id="twitch-channel-btn">
+                            Search <i id="search-icon" class="fas fa-sync ml-2"></i>
+                        </button>
+                </div>
+                    <div class="col-auto">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="True" id="process-chatters" name="process-chatters">
+                            <label class="form-check-label" for="process-chatters">
+                                Process All Chatters Account Creation Date
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <small class="form-text text-muted">
+                            Note: Process Chatters takes about 1 minute for every 30 chatters.
+                        </small>
+                    </div>
+                </div>
             </form>
 
             <div class="progress mt-2">
